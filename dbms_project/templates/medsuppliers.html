@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Medical Supplies</title>
+    {% load static %}
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" href="{% static 'medsuppliers.css' %}">
+    <link rel="stylesheet" href="{% static 'medsuppliers.css' %}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Manage Medical Supplies</h1>
+        </header>
+
+        <section class="section">
+            <form class="form" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="supply-id">Supply ID:</label>
+                    <input type="text" id="supply-name" name="supply_id" placeholder="Enter supply id">
+                </div>
+                <div class="form-group">
+                    <label for="supply-name">Supply Name:</label>
+                    <input type="text" id="supply-name" name="supply_name" placeholder="Enter supply name">
+                </div>
+                <div class="form-group">
+                    <label for="category">Category:</label>
+                    <select id="category" name="category">
+                        <option value="equipment">Equipment</option>
+                        <option value="medication">Medication</option>
+                        <option value="consumables">Consumables</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="unit-price">Unit Price:</label>
+                    <input type="number" id="unit-price" name="unit_price" placeholder="Enter price per unit">
+                </div>
+                <div class="form-group">
+                    <label for="no-of-units">Number Of Units:</label>
+                    <input type="number" id="no-of-units" name="num_units" placeholder="Number of Units">
+                </div>
+                <div class="form-group">
+                    <label for="supplier-id">Supplier ID:</label>
+                    <input type="number" id="supplier-id" name="supplier_id" placeholder="Enter supplier ID">
+                </div>
+                <button type="submit" class="submit-btn">Add Supply</button>
+            </form>
+        </section>
+
+        {% if existing_med %}
+        <script>
+            alert("Medicine already exists");
+        </script>
+        {% endif %}
+        
+        {% if success %}
+        <script>
+            alert("Registration successful!");
+        </script>
+        {% endif %}
+
+    </div>
+</body>
+</html>

@@ -1,3 +1,6 @@
 from django.contrib import admin
+from . models import LoginInfo,SignInInfo,MedReg
 
-# Register your models here.
+admin.site.register(LoginInfo)
+admin.site.register(SignInInfo)
+admin.site.register(MedReg)

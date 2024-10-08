@@ -76,8 +76,13 @@ WSGI_APPLICATION = 'dbms1.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'dbproject',
+        'HOST': 'localhost',
+        'PORT': '5432',
+        'USER': 'postgres',
+        'PASSWORD': 'Avishavi123'
+
     }
 }
 
@@ -97,8 +102,14 @@ AUTH_PASSWORD_VALIDATORS = [
     },
     {
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
+    },  
 ]
+
+AUTHENTICATION_BACKENDS = [
+    'dbms_project.authentication.CustomUserBackend',  # Replace with your path
+    'django.contrib.auth.backends.ModelBackend',  # Keep this if you want to use the default User model as well
+]
+
 
 
 # Internationalization

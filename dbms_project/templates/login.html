@@ -4,12 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login Page</title>
+    {% load static %}
     <link rel="stylesheet" href="{% static 'login1.css' %}">
 </head>
 <body>
     <div class="login-container">
         <h2>Login</h2>
-        <form action="/login" method="post">
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
             <div class="input-group">
                 <label for="username">Username</label>
                 <input type="text" id="username" name="username" required>
@@ -19,8 +21,14 @@
                 <input type="password" id="password" name="password" required>
             </div>
             <button type="submit">Login</button>
-            <p class="signup-link">Don't have an account? <a href="#">Sign up</a></p>
+            <p class="signup-link">Don't have an account? <a href="{% url 'sign_up' %}">Sign up</a></p>
         </form>
+
+        {% if error_message %}
+        <script>
+            alert("{{ error_message|escapejs }}");
+        </script>
+        {% endif %}
     </div>
 </body>
 </html>

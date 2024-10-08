@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventory</title>
+    {% load static %}
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet"  href="{% static 'inventory.css' %}">
+    <link rel="stylesheet" href="{% static 'inventory.css' %}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Inventory</h1>
+        </header>
+
+        <section class="section">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Stock ID</th>
+                        <th>Supply ID</th>
+                        <th>Quantity Available</th>
+                        <th>Reorder Level</th>
+                        <th>Expiry Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>101</td>
+                        <td>50</td>
+                        <td>10</td>
+                        <td>2025-01-01</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>102</td>
+                        <td>30</td>
+                        <td>5</td>
+                        <td>2024-12-12</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+    </div>
+</body>
+</html>

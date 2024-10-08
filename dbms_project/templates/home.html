@@ -1,0 +1,62 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medical Supply System</title>
+    {% load static %}
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet"> 
+    <link rel="stylesheet" href="{% static 'home.css' %}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Medical Supply System</h1>
+        </header>
+
+        <section class="links-section">
+            <h2>Select a Section:</h2>
+            <ul>
+                <li><a href="{% url 'users' %}">Manage Users</a></li>
+                <li><a href="{% url 'suppliers' %}">Manage Suppliers</a></li>
+                <li><a href="{% url 'medsuppliers' %}">Manage Medical Supplies</a></li>
+                <li><a href="{% url 'inventory' %}">Inventory</a></li>
+                <li><a href="orders.html">Orders</a></li>
+            </ul>
+        </section>
+    </div>
+</body>
+</html> -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medical Supply System</title>
+    {% load static %}
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'home.css' %}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div></div>
+            <h1>Medical Supply System</h1>
+            <!-- <button class="logout-btn" onclick="window.location.href='{% url 'log_out' %}'">Logout</button> -->
+             <a href="{% url 'log_out' %}" class="logout-btn">Logout</a>
+
+        </header>
+
+        <section class="links-section">
+            <!-- <h2>Select a Section:</h2> -->
+            <ul>
+                <li><a href="{% url 'users' %}">Manage Users</a></li>
+                <!-- <li><a href="{% url 'suppliers' %}">Manage Suppliers</a></li> -->
+                <li><a href="{% url 'medsuppliers' %}">Medical Supplies Registration </a></li>
+                <li><a href="{% url 'inventory' %}">Inventory</a></li>
+                <li><a href="orders.html">Orders</a></li>
+            </ul>
+        </section>
+    </div>
+</body>
+</html>
