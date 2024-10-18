@@ -74,50 +74,63 @@ def inventory(request):
     return render(request,'inventory.html')
 
 def medsuppliers(request):
-    error_message=None
-    if request.method== "POST":
-        supply_id= request.POST['supply_id']
-        supply_name =request.POST['supply_name']
-        category= request.POST['category']
-        unit_price= request.POST['unit_price']
-        num_units= request.POST['num_units']
-        supplier_id= request.POST['supplier_id']
+    error_message = None
+    if request.method == "POST":
+        supply_id = request.POST['supply_id']
+        supply_name = request.POST['supply_name']
+        category = request.POST['category']
+        unit_price = request.POST['unit_price']
+        num_units = int(request.POST['num_units'])  
+        supplier_id = request.POST['supplier_id']
 
-        if MedReg.objects.filter(supply_id=supply_id).exists():
-            return render(request, 'medsuppliers.html', {'existing_med': True})
-        
-        # elif Medequip.objects.filter(supply_id=supply_id).exists():
-        #     return render(request, 'medsuppliers.html', {'existing_equip': True})
-        
-        # elif Medconsume.objects.filter(supply_id=supply_id).exists():
-        #     return render(request, 'medsuppliers.html', {'existing_consume': True})
+        try:
+            medin = Supplier.objects.get(supplierid=supplier_id)
 
-        else:
-            try:
-                medin=Supplier.objects.get(supplierid=supplier_id)
-                if supplier_id!= str(medin.supplierid):
-                    error_message="Invalid supplier id"
-                else:
-                    if category.strip().lower() == 'equipment':
-                        medinfo = Medequip(supply_id=supply_id,supply_name=supply_name,category=category,unit_price=unit_price,num_units=num_units,supplier_id=medin)
+            if supplier_id != str(medin.supplierid):
+                error_message = "Invalid supplier id"
+            else:
+                if category.strip().lower() == 'equipment':
+                    if Medequip.objects.filter(supply_id=supply_id,supply_name=supply_name).exists():
+                        medinfo = Medequip.objects.get(supply_id=supply_id)
+                        medinfo.num_units += num_units 
                         medinfo.save()
-                        return render(request, 'medsuppliers.html', {'success': True})
-                    if category.strip().lower() == 'medication':
-                        medinfo = MedReg(supply_id=supply_id,supply_name=supply_name,category=category,unit_price=unit_price,num_units=num_units,supplier_id=medin)
-                        medinfo.save()
-                        return render(request, 'medsuppliers.html', {'success': True})
+                        return render(request, 'medsuppliers.html', {'success': f'Quantity updated for {medinfo.supply_name}'})
                     else:
-                        medinfo = Medconsume(supply_id=supply_id,supply_name=supply_name,category=category,unit_price=unit_price,num_units=num_units,supplier_id=medin)
+                        medinfo = Medequip(supply_id=supply_id, supply_name=supply_name, category=category, unit_price=unit_price, num_units=num_units, supplier_id=medin)
                         medinfo.save()
-                        return render(request, 'medsuppliers.html', {'success': True})
-                    
-            except Supplier.DoesNotExist:
-                error_message = "Supplier not found"
-            except Exception as e:
-                error_message = str(e)
-            return render(request, 'medsuppliers.html', {'error_message': error_message})
-        
-    return render(request,'medsuppliers.html')
+                        return render(request, 'medsuppliers.html', {'success': 'New equipment entry created'})
+
+                elif category.strip().lower() == 'medication':
+                    if MedReg.objects.filter(supply_id=supply_id).exists():
+                        medinfo = MedReg.objects.get(supply_id=supply_id)
+                        medinfo.num_units += num_units  
+                        medinfo.save()
+                        return render(request, 'medsuppliers.html', {'success': f'Quantity updated for {medinfo.supply_name}'})
+                    else:
+                        medinfo = MedReg(supply_id=supply_id, supply_name=supply_name, category=category, unit_price=unit_price, num_units=num_units, supplier_id=medin)
+                        medinfo.save()
+                        return render(request, 'medsuppliers.html', {'success': 'New medication entry created'})
+
+                else:
+                    if Medconsume.objects.filter(supply_id=supply_id).exists():
+                        medinfo = Medconsume.objects.get(supply_id=supply_id)
+                        medinfo.num_units += num_units 
+                        medinfo.save()
+                        return render(request, 'medsuppliers.html', {'success': f'Quantity updated for {medinfo.supply_name}'})
+                    else:
+                        medinfo = Medconsume(supply_id=supply_id, supply_name=supply_name, category=category, unit_price=unit_price, num_units=num_units, supplier_id=medin)
+                        medinfo.save()
+                        return render(request, 'medsuppliers.html', {'success': 'New consumable entry created'})
+
+        except Supplier.DoesNotExist:
+            error_message = "Invalid Supplier id"
+        except Exception as e:
+            error_message = str(e)
+
+        return render(request, 'medsuppliers.html', {'error_message': error_message})
+
+    return render(request, 'medsuppliers.html')
+
 
 def log_out(request):
     logout(request)

@@ -67,9 +67,15 @@
         </script>
         {% endif %}
         
-        {% if success %}
+        <!-- {% if success %}
         <script>
             alert("Registration successful!");
+        </script>
+        {% endif %} -->
+
+        {% if success %}
+        <script>
+            alert("{{ success|escapejs }}");
         </script>
         {% endif %}
 
