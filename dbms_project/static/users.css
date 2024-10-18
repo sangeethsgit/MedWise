@@ -35,7 +35,7 @@ header h1 {
 .form {
     display: flex;
     flex-direction: column;
-    gap: 20px;  /* Adds space between form fields */
+    gap: 20px;  
 }
 
 .form-group {
@@ -63,7 +63,7 @@ header h1 {
     border-radius: 5px;
     font-size: 1rem;
     cursor: pointer;
-    align-self: flex-start;  /* Aligns button to the start */
+    align-self: flex-start;
 }
 
 .submit-btn:hover {

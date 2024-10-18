@@ -18,9 +18,10 @@ body {
     padding: 2rem;
     border-radius: 8px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    max-width: 400px;
+    max-width: 600px;
+    width: 100%; 
 }
+
 
 h2 {
     text-align: center;
@@ -49,16 +50,16 @@ h2 {
 .alert-box {
     margin-top: 20px;
     padding: 15px;
-    background-color: #f44336; /* Red background for error alert */
-    color: white; /* White text */
+    background-color: #f44336; 
+    color: white; 
     text-align: center;
     border-radius: 4px;
     max-width: 400px;
     margin-left: auto;
     margin-right: auto;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    font-size: 18px; /* Larger font size */
-    position: relative; /* For positioning the close button */
+    font-size: 18px;
+    position: relative; 
 }
 
 .signup-form button {

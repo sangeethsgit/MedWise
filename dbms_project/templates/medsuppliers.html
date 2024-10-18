@@ -54,10 +54,28 @@
             alert("Medicine already exists");
         </script>
         {% endif %}
+
+        {% if existing_equip %}
+        <script>
+            alert("Equipment already exists");
+        </script>
+        {% endif %}
+
+        {% if existing_consume %}
+        <script>
+            alert("Consumable already exists");
+        </script>
+        {% endif %}
         
         {% if success %}
         <script>
             alert("Registration successful!");
+        </script>
+        {% endif %}
+
+        {% if error_message %}
+        <script>
+            alert("{{ error_message|escapejs }}");
         </script>
         {% endif %}
 

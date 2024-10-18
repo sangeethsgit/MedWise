@@ -1,11 +1,12 @@
 from django.shortcuts import render,redirect,HttpResponse
 from django.contrib.auth import authenticate,login,logout
 from django.contrib import messages
-from .models import LoginInfo,SignInInfo,MedReg
+from .models import LoginInfo,SignInInfo,MedReg,Supplier,Medconsume,Medequip
 from django.contrib.auth.models import User
 from django.contrib.auth.hashers import make_password,check_password
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_protect
+import uuid
 
 
 def log_in(request):
@@ -51,6 +52,19 @@ def home(request):
     return render(request,'home.html')
 
 def users(request):
+    if request.method=="POST":
+        sup_name=request.POST.get('sup_name')
+        role=request.POST['role']
+        supplierid= request.POST.get('supplierid')
+        email=request.POST['email']
+        phone_no=request.POST.get('phone_no')
+        company_name=request.POST.get('company_name')
+        company_addr=request.POST.get('company_addr')
+
+        sup_reg=Supplier(supplierid=supplierid,sup_name=sup_name,role=role,email=email,phone_no=phone_no,company_name=company_name,company_addr=company_addr)
+        sup_reg.save()
+        return render(request, 'users.html', {'success': True})
+    
     return render(request,'users.html')
 
 def suppliers(request):
@@ -60,6 +74,7 @@ def inventory(request):
     return render(request,'inventory.html')
 
 def medsuppliers(request):
+    error_message=None
     if request.method== "POST":
         supply_id= request.POST['supply_id']
         supply_name =request.POST['supply_name']
@@ -71,10 +86,36 @@ def medsuppliers(request):
         if MedReg.objects.filter(supply_id=supply_id).exists():
             return render(request, 'medsuppliers.html', {'existing_med': True})
         
-        medinfo = MedReg(supply_id=supply_id,supply_name=supply_name,category=category,unit_price=unit_price,num_units=num_units,supplier_id=supplier_id)
-        medinfo.save()
-        return render(request, 'medsuppliers.html', {'success': True})
+        # elif Medequip.objects.filter(supply_id=supply_id).exists():
+        #     return render(request, 'medsuppliers.html', {'existing_equip': True})
+        
+        # elif Medconsume.objects.filter(supply_id=supply_id).exists():
+        #     return render(request, 'medsuppliers.html', {'existing_consume': True})
 
+        else:
+            try:
+                medin=Supplier.objects.get(supplierid=supplier_id)
+                if supplier_id!= str(medin.supplierid):
+                    error_message="Invalid supplier id"
+                else:
+                    if category.strip().lower() == 'equipment':
+                        medinfo = Medequip(supply_id=supply_id,supply_name=supply_name,category=category,unit_price=unit_price,num_units=num_units,supplier_id=medin)
+                        medinfo.save()
+                        return render(request, 'medsuppliers.html', {'success': True})
+                    if category.strip().lower() == 'medication':
+                        medinfo = MedReg(supply_id=supply_id,supply_name=supply_name,category=category,unit_price=unit_price,num_units=num_units,supplier_id=medin)
+                        medinfo.save()
+                        return render(request, 'medsuppliers.html', {'success': True})
+                    else:
+                        medinfo = Medconsume(supply_id=supply_id,supply_name=supply_name,category=category,unit_price=unit_price,num_units=num_units,supplier_id=medin)
+                        medinfo.save()
+                        return render(request, 'medsuppliers.html', {'success': True})
+                    
+            except Supplier.DoesNotExist:
+                error_message = "Supplier not found"
+            except Exception as e:
+                error_message = str(e)
+            return render(request, 'medsuppliers.html', {'error_message': error_message})
         
     return render(request,'medsuppliers.html')
 
