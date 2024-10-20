@@ -27,4 +27,6 @@ urlpatterns = [
     path('suppliers/', views.suppliers,name='suppliers'),
     path('inventory/', views.inventory,name='inventory'),
     path('medsuppliers/', views.medsuppliers,name='medsuppliers'),
+    path('orders/', views.orders,name='orders'),
+    path('check_availability/', views.check_availability,name='check_availability'),
 ]

@@ -56,6 +56,12 @@
             alert("Registration successful!");
         </script>
         {% endif %}
+
+        {% if error %}
+        <script>
+            alert("Supplier id already exists");
+        </script>
+        {% endif %}
         
     </div>
 </body>

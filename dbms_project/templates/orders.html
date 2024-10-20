@@ -1,50 +1,278 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'orders.css' %}">
+    <title>Order Form</title>
+</head>
+<body>
+    <header>
+        <h1>Medication and Equipment Order Form</h1>
+    </header>
+    <main>
+        <section class="search-section">
+            <form id="search-form" method="POST" enctype="multipart/form-data" onsubmit="checkAvailability(event)">
+                <label for="search-item-name">Check Product Availability:</label>
+                <input type="text" id="search-item-name" name="item_name" required>
+                <button type="submit">Check Availability</button>
+            </form>
+            <div id="availability-result" style="display:none;">
+                <p id="availability-message"></p>
+            </div>
+        </section>
+
+        <section class="form-section">
+            <form id="order-form" onsubmit="placeOrder(event)">
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" required>
+
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+
+                <label for="phone">Phone Number:</label>
+                <input type="tel" id="phone" name="phone" required>
+
+                <label for="item-type">Item Type:</label>
+                <select id="item-type" name="item-type" required>
+                    <option value="medication">Medication</option>
+                    <option value="consumable">Consumable</option>
+                    <option value="equipment">Equipment</option>
+                </select>
+
+                <label for="item-name">Item Name:</label>
+                <input type="text" id="item-name" name="item-name" required>
+
+                <label for="quantity">Quantity:</label>
+                <input type="number" id="quantity" name="quantity" min="1" required>
+
+                <button type="submit">Place Order</button>
+            </form>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2024 Medication Order System</p>
+    </footer>
+
+    <script>
+        const products = [
+            { name: 'Aspirin', quantity: 10 },
+            { name: 'Bandage', quantity: 0 },
+            { name: 'Gloves', quantity: 20 },
+            { name: 'Syringe', quantity: 5 }
+        ];
+
+        function checkAvailability(event) {
+            event.preventDefault(); 
+            const searchItemName = document.getElementById('search-item-name').value;
+            const resultMessage = document.getElementById('availability-message');
+            const availabilityResult = document.getElementById('availability-result');
+
+            const product = products.find(p => p.name.toLowerCase() === searchItemName.toLowerCase());
+
+            if (product) {
+                resultMessage.textContent = `${product.name} - Available: ${product.quantity} units`;
+                availabilityResult.style.display = 'block';
+                document.getElementById('item-name').value = product.name; 
+                document.getElementById('quantity').max = product.quantity;
+            } else {
+                resultMessage.textContent = 'Product not found.';
+                availabilityResult.style.display = 'block';
+            }
+        }
+
+        function placeOrder(event) {
+            event.preventDefault(); 
+            alert('Order placed successfully!');
+            document.getElementById('order-form').reset(); 
+            document.getElementById('availability-result').style.display = 'none'; 
+        }
+    </script>
+</body>
+</html> -->
+
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'orders.css' %}">
+    <title>Order Form</title>
+</head>
+<body>
+    <header>
+        <h1>Medication and Equipment Order Form</h1>
+    </header>
+    <main>
+        <section class="search-section">
+            <form id="search-form" method="POST" enctype="multipart/form-data" onsubmit="checkAvailability(event)">
+                <label for="search-item-name">Check Product Availability:</label>
+                <input type="text" id="search-item-name" name="item_name" required>
+                <button type="submit">Check Availability</button>
+            </form>
+            <div id="availability-result" style="display:none;">
+                <p id="availability-message"></p>
+            </div>
+        </section>
+
+        <section class="form-section">
+            <form id="order-form" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" required>
+
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+
+                <label for="phone">Phone Number:</label>
+                <input type="tel" id="phone" name="phone" required>
+
+                <label for="item-type">Item Type:</label>
+                <select id="item-type" name="item_type" required>
+                    <option value="medication">Medication</option>
+                    <option value="consumable">Consumable</option>
+                    <option value="equipment">Equipment</option>
+                </select>
+
+                <label for="item-name">Item Name:</label>
+                <input type="text" id="item-name" name="item_name" required>
+
+                <label for="quantity">Quantity:</label>
+                <input type="number" id="quantity" name="quantity" min="1" required>
+
+                <button type="submit">Place Order</button>
+            </form>
+        </section>
+
+        {% if error_message %}
+        <div class="error-message">
+            <p>{{ error_message }}</p>
+        </div>
+        {% elif success_message %}
+        <div class="success-message">
+            <p>{{ success_message }}</p>
+        </div>
+        {% endif %}
+    </main>
+    <footer>
+        <p>&copy; 2024 Medication Order System</p>
+    </footer>
+
+    <script>
+        // Simulated product data (you would normally fetch this from your server)
+        const products = [
+            { name: 'Aspirin', quantity: 10 },
+            { name: 'Bandage', quantity: 0 },
+            { name: 'Gloves', quantity: 20 },
+            { name: 'Syringe', quantity: 5 }
+        ];
+
+        // Check product availability
+        function checkAvailability(event) {
+            event.preventDefault(); // Prevent default form submission
+            const searchItemName = document.getElementById('search-item-name').value;
+            const resultMessage = document.getElementById('availability-message');
+            const availabilityResult = document.getElementById('availability-result');
+
+            // Search for the product
+            const product = products.find(p => p.name.toLowerCase() === searchItemName.toLowerCase());
+
+            if (product) {
+                resultMessage.textContent = `${product.name} - Available: ${product.quantity} units`;
+                availabilityResult.style.display = 'block';
+                document.getElementById('item-name').value = product.name; // Set the item name in the order form
+                document.getElementById('quantity').max = product.quantity; // Set the max quantity based on availability
+            } else {
+                resultMessage.textContent = 'Product not found.';
+                availabilityResult.style.display = 'block';
+            }
+        }
+    </script>
+</body>
+</html> -->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Orders</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/orders.css">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'orders.css' %}">
+    <title>Order Form</title>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>Orders</h1>
-        </header>
-
-        <section class="section">
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Order ID</th>
-                        <th>Supplier ID</th>
-                        <th>Supply ID</th>
-                        <th>Quantity</th>
-                        <th>Order Date</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td>101</td>
-                        <td>201</td>
-                        <td>50</td>
-                        <td>2024-10-01</td>
-                        <td>Pending</td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td>102</td>
-                        <td>202</td>
-                        <td>30</td>
-                        <td>2024-10-05</td>
-                        <td>Completed</td>
-                    </tr>
-                </tbody>
-            </table>
+    <header>
+        <h1>Medication and Equipment Order Form</h1>
+    </header>
+    <main>
+        <section class="search-section">
+            <form id="search-form" method="POST" action="{% url 'check_availability' %}">
+                {% csrf_token %}
+                <label for="search-item-name">Check Product Availability:</label>
+                <input type="text" id="search-item-name" name="name1" required>
+                <button type="submit" name="check_availability">Check Availability</button>
+            </form>
         </section>
+
+        <section class="form-section">
+            <form id="order-form" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" required>
+
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+
+                <label for="phone">Phone Number:</label>
+                <input type="tel" id="phone" name="phone" required>
+
+                <label for="item-type">Item Type:</label>
+                <select id="item-type" name="item_type" required>
+                    <option value="medication">Medication</option>
+                    <option value="consumable">Consumable</option>
+                    <option value="equipment">Equipment</option>
+                </select>
+
+                <label for="item-name">Item Name:</label>
+                <input type="text" id="item-name" name="item_name" required {% if item_name %} value="{{ item_name }}" {% endif %}>
+
+                <label for="quantity">Quantity:</label>
+                <input type="number" id="quantity" name="quantity" min="1" required {% if max_quantity %} max="{{ max_quantity }}" {% endif %}>
+
+                <button type="submit" name="place_order">Place Order</button>
+            </form>
+        </section>
+    </main>
+
+    <!-- <footer>
+        <p>&copy; 2024 Medication Order System</p>
+    </footer> -->
+
+    {% if error_message %}
+        <script>
+            alert("{{ error_message|escapejs }}");
+        </script>
+        {% endif %}
+
+        <!-- {% if error_message %}
+    <div class="error-message">
+        {{ error_message }}
     </div>
+{% endif %} -->
+
+        {% if success_message %}
+        <script>
+            alert("{{ success_message|escapejs }}");
+        </script>
+        {% endif %}
+
+        {% if availability_message %}
+        <script>
+            alert("{{ availability_message|escapejs }}");
+        </script>
+        {% endif %}
 </body>
 </html>
+
